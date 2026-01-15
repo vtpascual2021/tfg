@@ -1,28 +1,17 @@
-#####################
+##############
 # Base image #
-#####################
+##############
 FROM nvidia/cuda:12.6.0-runtime-ubuntu22.04 as base
 
-# Labels
-LABEL maintainer="Vera Teresa Pascual Guijarro"
-LABEL contact="vera.pascualguijarro@gmail.com"
-LABEL description=""
-
 ARG ROS_VERSION="humble"
-
-# ==
-# Disable dialog frontend
-# ==
+# Disable dialog
 ARG DEBIAN_FRONTEND=noninteractive
 
-# ==
-# Select shell
-# ==
 SHELL ["/bin/bash", "-c"]
 
-# ==
+# ===========
 # Install ROS
-# ==
+# ===========
 RUN apt update \
     && apt-get install -y --no-install-recommends \
         curl \
@@ -51,14 +40,13 @@ RUN curl -sSL https://packages.osrfoundation.org/gazebo.gpg \
     $(lsb_release -sc) main" \
     > /etc/apt/sources.list.d/gazebo-stable.list
 
-# Requisitos extra para HTTPS y Fuel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     ignition-tools \
     libignition-fuel-tools7-dev \
     && rm -rf /var/lib/apt/lists/*
 
-
+# ROS and python tools
 RUN apt-get update \
     && apt install --no-install-recommends -y ros-${ROS_VERSION}-desktop-full \
     && apt install --no-install-recommends -y \
@@ -76,37 +64,20 @@ RUN apt-get update \
     && echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
 RUN pip install getch
-# ==
-# Remove cache and extra files
-# ==
 RUN rm -rf /var/lib/apt/lists/* && apt clean
 
-
-# ==
-# Enable dialog again
-# ==
-ARG DEBIAN_FRONTEND=dialog
-
-# ==
-# Run bash
-# ==
 CMD ["/bin/bash"]
 WORKDIR /root/ros2_humble_ws
 
-# ==
-# Set XDG_RUNTIME_DIR
-# ==
 ENV XDG_RUNTIME_DIR=/tmp/runtime-${UID}
 RUN mkdir -p -m 700 $XDG_RUNTIME_DIR
 
-###############################################################
-# Development image
-# This adds display access and simulation support
-###############################################################
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
+#####################
+# Development image #
+#####################
 FROM base as dev
-
-ENV DEBIAN_FRONTEND=noninteractive
     
 RUN mkdir -p /root/ros2_humble_ws/src \
     && rm -rf /var/lib/apt/lists/* \
@@ -174,6 +145,3 @@ RUN apt-get update \
 
 # RUN bash -c "source /opt/ros/humble/setup.bash && colcon build --symlink-install"
 # RUN ./third_parties.sh  # ????????????? NO FUNCIONA, HAY QUE EJECUTARLO A PARTE
-
-ENV DEBIAN_FRONTEND=dialog \
-    RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
