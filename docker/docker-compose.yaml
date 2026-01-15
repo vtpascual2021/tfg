@@ -1,0 +1,23 @@
+services:
+  tfg:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: dev
+    volumes:
+      - ../urjc-excavation-world:/root/ros2_humble_ws/src/urjc-excavation-world
+      - ../gazebo_cave_world:/root/ros2_humble_ws/src/gazebo_cave_world
+      - ../lidarslam_ros2:/root/ros2_humble_ws/src/lidarslam_ros2
+      - ../drone_pkg:/root/ros2_humble_ws/src/drone_pkg
+      - ../project_gazebo_as2:/root/ros2_humble_ws/src/project_gazebo_as2
+      - ../OctoMap-ROS2:/root/ros2_humble_ws/src/OctoMap-ROS2
+      - ../Bonxai:/root/ros2_humble_ws/src/Bonxai
+      - ../easy_nav:/root/ros2_humble_ws/src/EasyNav
+    environment:
+      - ROS_IP=127.0.0.1
+      - ROS_DOMAIN_ID=123
+      - GZ_SIM_RESOURCE_PATH=${GZ_SIM_RESOURCE_PATH}
+    command: "/bin/bash"
+    stdin_open: true
+    tty: true
+    network_mode: "host"

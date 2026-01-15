@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>drone_pkg</name>
+  <version>1.0.0</version>
+  <description>test environment behaviuor</description>
+  <license>Apache 2.0</license>
+  <author email="vt.pascual.2021@alumnos.urjc.es">Vera T. Pascual</author>
+  <maintainer email="vt.pascual.2021@alumnos.urjc.es">Vera T. Pascual</maintainer>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>ros_ign_gazebo</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>urjc_excavation_world</exec_depend>
+
+  <depend>sensor_msgs</depend>
+  <depend>pcl_ros</depend>
+  <depend>libpcl-all-dev</depend>
+  <depend>as2_core</depend>
+  <depend>as2_behaviors</depend>
+  <depend>as2_msgs</depend>
+  <depend>as2_motion_reference_handlers</depend>
+
+ <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

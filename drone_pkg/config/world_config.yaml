@@ -1,0 +1,16 @@
+world_name: "cave_world_generic"
+origin: 
+    latitude: 0.0
+    longitude: 0.0
+    altitude: 0.0 # map has negative altitude
+drones:
+  - model_type: "x500"
+    model_name: "drone0"
+    xyz:
+      - 0.0
+      - 0.0
+      - 0.0
+    payload:
+      - model_type: "lidar_3d"
+        model_name: "lidar_3d"
+
